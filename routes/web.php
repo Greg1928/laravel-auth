@@ -29,3 +29,7 @@ Route::middleware('auth')
         Route::get('/home', 'HomeController@index')->name('home');
     });
 
+// FRONTOFFICE
+Route::any('{any?}', function () {
+    return view('guest.home');
+})->where('any', '.*');
