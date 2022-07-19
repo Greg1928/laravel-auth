@@ -75,9 +75,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -87,9 +87,27 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        //validation
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:65535',
+            'published' => 'sometimes|accepted'
+        ]);
+        //update
+        $data = $request->all();
+        //slug changes if title changes
+        if( $post->title != $data['title'] ) {
+            $post->slug = $this->getSlug($data['title']);
+        }
+        $post->fill($data);
+
+        $post->published = isset($data['published']);
+
+        $post->save();
+        //redirect
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
