@@ -38,6 +38,11 @@
                         <td>
                             <a href="{{route('admin.posts.show', $post->id)}}" class="btn btn-primary">Show</a>
                             <a href="{{route('admin.posts.edit', $post->id)}}" class="btn btn-warning">Edit</a>
+                            <form action="{{route('admin.posts.destroy', $post->id)}}" method="POST" style="display: inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>                    
                     </tr>
                     @endforeach
